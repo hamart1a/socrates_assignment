@@ -1,11 +1,7 @@
 let input = document.getElementById('comment_input');
 let addButton = document.getElementById('add');
 let commentList = document.getElementById('comment_list');
-//let cIndex = 0;
 
-
-
-//add function
 addButton.addEventListener('click', addComment);
 input.addEventListener('keyup', function(event){
   if(event.keyCode === 13){
@@ -24,7 +20,6 @@ function addComment() {
 }
 
 function makeCommentDOM(contents) {
-    //cIndex = document.querySelectorAll('.comment_unit').length+1;
     let commentContainer = makeCommentContainer();
     let commentContents = makeCommentContents(contents);
     let commentBtn = makeCommentBtn();
@@ -37,7 +32,6 @@ function makeCommentDOM(contents) {
 function makeCommentContainer(){
     let commentContainer =  document.createElement('div');
         commentContainer.classList.add('comment_unit');
-        //commentContainer.setAttribute('index',cIndex);
     return commentContainer;
 };
 function makeCommentContents(contents){
@@ -55,41 +49,39 @@ function makeCommentBtn(){
         let editIcon = document.createElement('i');
         editIcon.className='fas fa-pen';
         editButton.appendChild(editIcon);
-    let doneButton = document.createElement('button');
-        doneButton.className = 'done';
-        let doneIcon = document.createElement('i');
-        doneIcon.className='fas fa-check';
-        doneButton.appendChild(doneIcon);
+    let saveButton = document.createElement('button');
+        saveButton.className = 'save';
+        let saveIcon = document.createElement('i');
+        saveIcon.className='fas fa-check';
+        saveButton.appendChild(saveIcon);
     let deleteButton = document.createElement('button');
         deleteButton.className = 'delete';
-        //deleteButton.setAttribute("onclick","deleteComment(this)");
         let deleteIcon = document.createElement('i');
         deleteIcon.className='fas fa-trash';
         deleteButton.appendChild(deleteIcon);
-    commentButtons.append(editButton,doneButton,deleteButton);
+    commentButtons.append(editButton,saveButton,deleteButton);
     return commentButtons;
 };
 
 function applyCommentContainerEvent(commentContainer){
     const deleteButton = commentContainer.querySelector(".delete");
-    const doneButton = commentContainer.querySelector(".done");
+    const saveButton = commentContainer.querySelector(".save");
     const editButton = commentContainer.querySelector(".edit");
+    let contents = commentContainer.firstChild
 
     deleteButton.addEventListener("click", () => {
         commentList.removeChild(commentContainer)
     });
-}
 
-//댓글삭제
-// function deleteComment(t){
-//     let index = t.getAttribute("index");
-//     let comments = document.querySelectorAll('.comment_unit');
-//     comments.forEach(comment => {
-//         if(index == comment.getAttribute("index")){
-//             comment.remove();
-//         }
-//     });
-// };
+    editButton.addEventListener('click', () => {
+            contents.removeAttribute('readOnly');
+            contents.focus();
+    });
+
+    saveButton.addEventListener('click', () => {
+        contents.setAttribute('readOnly', 'readOnly');
+    });
+}
 
 
 

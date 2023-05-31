@@ -1,14 +1,11 @@
 let input = document.getElementById('comment_input');
 let addButton = document.getElementById('add');
-
-let editButton = document.querySelectorAll('edit');
-let doneButton = document.querySelectorAll('done');
-let deleteButton = document.querySelectorAll('delete');
 let commentList = document.getElementById('comment_list');
+//let cIndex = 0;
 
 
 
-//생성
+//add function
 addButton.addEventListener('click', addComment);
 input.addEventListener('keyup', function(event){
   if(event.keyCode === 13){
@@ -17,44 +14,82 @@ input.addEventListener('keyup', function(event){
   }
 });
 
-// <!-- <div class="comment_unit">
-// <input type="text"
-//       class="text"
-//       value="new Task"
-//       readonly
-// />
-// <div class="actions">
-//     <button class="edit"> <i class="fas fa-pen"></i> </button>
-//     <button class="done">  <i class="fas fa-check"></i></button>
-//     <button class="delete"> <i class="fas fa-trash"></i></button>
-//     <br>
-// </div>
-// </div>     -->
 function addComment() {
     let contents = input.value;
-    console.log(contents);
     if(!contents){alert('뭐라도입력해');}
-    else {makeCommentDOM(contents);}
+    else {
+        makeCommentDOM(contents);
+        input.value='';    
+    }
 }
 
 function makeCommentDOM(contents) {
+    //cIndex = document.querySelectorAll('.comment_unit').length+1;
+    let commentContainer = makeCommentContainer();
+    let commentContents = makeCommentContents(contents);
+    let commentBtn = makeCommentBtn();
+    commentContainer.appendChild(commentContents);
+    commentContainer.appendChild(commentBtn);
+    commentList.appendChild(commentContainer);
+    applyCommentContainerEvent(commentContainer);
+}
+
+function makeCommentContainer(){
     let commentContainer =  document.createElement('div');
         commentContainer.classList.add('comment_unit');
+        //commentContainer.setAttribute('index',cIndex);
+    return commentContainer;
+};
+function makeCommentContents(contents){
     let commentContents = document.createElement('input');
         commentContents.classList.add('contents');
         commentContents.setAttribute('value',contents);
         commentContents.setAttribute('readonly','true');
+    return commentContents;
+};
+function makeCommentBtn(){
     let commentButtons = document.createElement('div');
         commentButtons.classList.add('buttons');
-    commentContainer.appendChild(commentContents);
-    console.log(commentContainer);
-    commentList.innerHTML += commentContainer.innerHTML;
-    console.log("집어넣었더!");
+    let editButton = document.createElement('button');
+        editButton.className = 'edit';
+        let editIcon = document.createElement('i');
+        editIcon.className='fas fa-pen';
+        editButton.appendChild(editIcon);
+    let doneButton = document.createElement('button');
+        doneButton.className = 'done';
+        let doneIcon = document.createElement('i');
+        doneIcon.className='fas fa-check';
+        doneButton.appendChild(doneIcon);
+    let deleteButton = document.createElement('button');
+        deleteButton.className = 'delete';
+        //deleteButton.setAttribute("onclick","deleteComment(this)");
+        let deleteIcon = document.createElement('i');
+        deleteIcon.className='fas fa-trash';
+        deleteButton.appendChild(deleteIcon);
+    commentButtons.append(editButton,doneButton,deleteButton);
+    return commentButtons;
+};
 
+function applyCommentContainerEvent(commentContainer){
+    const deleteButton = commentContainer.querySelector(".delete");
+    const doneButton = commentContainer.querySelector(".done");
+    const editButton = commentContainer.querySelector(".edit");
+
+    deleteButton.addEventListener("click", () => {
+        commentList.removeChild(commentContainer)
+    });
 }
 
-
-//댓글수정
-
 //댓글삭제
+// function deleteComment(t){
+//     let index = t.getAttribute("index");
+//     let comments = document.querySelectorAll('.comment_unit');
+//     comments.forEach(comment => {
+//         if(index == comment.getAttribute("index")){
+//             comment.remove();
+//         }
+//     });
+// };
+
+
 
